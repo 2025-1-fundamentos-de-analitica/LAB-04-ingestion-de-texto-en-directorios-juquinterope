@@ -4,7 +4,9 @@
 """
 Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
-
+import pandas as pd # type:ignore
+import os
+from pathlib import Path
 
 def pregunta_01():
     """
@@ -71,3 +73,34 @@ def pregunta_01():
 
 
     """
+    train_data = Path("files/input/train")
+    train_dataset = pd.DataFrame(columns=["phrase", "target"])
+
+    for folder in train_data.iterdir():
+        if folder.name == ".DS_Store": continue
+        
+        for file in folder.glob("*.txt"):
+            phrase = file.read_text()
+            target = folder.name
+            train_dataset.loc[len(train_dataset)] = [phrase, target]
+
+    train_dataset.to_csv("files/output/train_dataset.csv", index=False)
+
+    test_data = Path("files/input/test")
+    test_dataset = pd.DataFrame(columns=["phrase", "target"])
+
+    for folder in test_data.iterdir():
+        if folder.name == ".DS_Store": continue
+        
+        for file in folder.glob("*.txt"):
+            phrase = file.read_text()
+            target = folder.name
+            test_dataset.loc[len(test_dataset)] = [phrase, target]
+
+    test_dataset.to_csv("files/output/test_dataset.csv", index=False)
+
+    return
+
+
+
+pregunta_01()
